@@ -12,12 +12,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import com.google.gson.Gson;
+
 import dk.convergens.ydelse.Ydelse;
 
 @Path("/ydelser/")
 public class YdelserREST {
 
-	// Gson for easy json output 
+	// Gson for easy json output
 	Gson gson = new Gson();
 
 	// List of all ydelser
@@ -111,7 +113,7 @@ public class YdelserREST {
 	public void update(@PathParam("id") int id, @FormParam("cpr") String cpr,
 			@FormParam("kr") int kr, @FormParam("dato") String dato,
 			@FormParam("type") String type) {
-		
+
 		boolean found = false;
 
 		for (Ydelse ydelse : ydelser) {
@@ -123,8 +125,8 @@ public class YdelserREST {
 				found = true;
 			}
 		}
-		
-		if(!found)
+
+		if (!found)
 			ydelser.add(new Ydelse(id, cpr, kr, dato, type));
 
 	}
