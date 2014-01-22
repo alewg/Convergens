@@ -6,14 +6,20 @@ import java.util.List;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NoContentException;
+
+import org.jboss.resteasy.util.NoContent;
 
 import com.google.gson.Gson;
 
+import dk.convergens.exceptions.EmptyListException;
 import dk.convergens.ydelse.Ydelse;
 
 @Path("/ydelser/")
@@ -47,7 +53,14 @@ public class YdelserREST {
 	public String getAll() {
 		return gson.toJson(ydelser);
 	}
-
+	
+	/**
+	 * 
+	 * <p>Get resource by cpr</p>
+	 * 
+	 * @param cpr the cpr number
+	 * @return
+	 */
 	@GET
 	@Path("/{cpr}")
 	@Produces("application/json")
@@ -61,7 +74,14 @@ public class YdelserREST {
 
 		return ydelserByCPR;
 	}
-
+	
+	/**
+	 * <p>Get resource from type and cpr</p>
+	 * 
+	 * @param type type of resource
+	 * @param cpr the cpr number
+	 * @return List of JSON objects
+	 */
 	@GET
 	@Path("/{type}/{cpr}")
 	@Produces("application/json")
@@ -73,8 +93,11 @@ public class YdelserREST {
 		for (Ydelse ydelse : ydelser)
 			if (ydelse.getType().equals(type) && ydelse.getCpr().equals(cpr))
 				ydelserByTypeAndCPR.add(ydelse);
-
-		return ydelserByTypeAndCPR;
+		
+		if(ydelserByTypeAndCPR.isEmpty())
+			return null;
+		else
+			return ydelserByTypeAndCPR;
 	}
 
 	/*
@@ -94,8 +117,20 @@ public class YdelserREST {
 	 * 
 	 * }
 	 */
-
+	
+	/**
+	 * 
+	 * <p>Add a new resource</p>
+	 * 
+ 	 * @param cpr the cpr number
+	 * @param kr the price
+	 * @param dato the time of date
+	 * @param type type of resource
+	 * @return JSON object with the newly created resource
+	 */
+	
 	@POST
+	@Produces(MediaType.APPLICATION_JSON)
 	public String add(@FormParam("createCPR") String cpr,
 			@FormParam("createKr") int kr,
 			@FormParam("createDato") String dato,
@@ -105,15 +140,26 @@ public class YdelserREST {
 
 		ydelser.add(y);
 
-		for (Ydelse ydelse : ydelser) {
-			System.out.println(ydelse);
-		}
-
 		return gson.toJson(y);
 	}
 
+	
+	/**
+	 * 
+	 * <p>Updating resource with provided parameters. If Id doesn't exist, new resource will be created. Path{/id}</p>
+	 * 
+	 * @param id resource identificaiton
+	 * @param cpr the cpr number
+	 * @param kr the price
+	 * @param dato the time of date
+	 * @param type type of resource
+	 * @return JSON object (with the updated/created data)
+	 * 
+	 */
+	
 	@PUT
 	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String update(@PathParam("id") int id, @FormParam("cpr") String cpr,
 			@FormParam("kr") int kr, @FormParam("dato") String dato,
 			@FormParam("type") String type) {
@@ -140,22 +186,46 @@ public class YdelserREST {
 
 		return gson.toJson(y);
 	}
-
+	
+	
+	
+	/**
+	 * 
+	 * <p>Deleting resource by id Path{/id}</p>
+	 * 
+	 * @param id for deleting resource
+	 * @return JSON object (the deleted resource)
+	 * @throws NotFoundException if deleting not existing resource
+	 * 
+	 * 
+	 */
 	@DELETE
 	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
 	public String delete(@PathParam("id") int id) {
 
 		Ydelse y = null;
+		boolean found = false;
 
 		for (Ydelse ydelse : ydelser) {
 			if (ydelse.getId() == id) {
 				y = ydelse;
+				found = true;
 				ydelser.remove(y);
 				break;
 			}
 		}
-
+		
+		if(!found)
+			throw new NotFoundException("Ydelse not found");
+		
 		return gson.toJson(y);
+	}
+	
+	public void hej() {
+		
+		
+		
 	}
 
 }
