@@ -57,7 +57,10 @@
 				name="deletBtn" value="Delete" />
 		</form>
 	</div>
-
+	
+	
+	
+	
 	<script>
 		$(document).ready(function() {
 

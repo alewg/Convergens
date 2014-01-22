@@ -12,14 +12,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import com.google.gson.Gson;
-
 import dk.convergens.ydelse.Ydelse;
 
 @Path("/ydelser/")
 public class YdelserREST {
 
-	// Gson for easy json output
+	// Gson for easy json output 
 	Gson gson = new Gson();
 
 	// List of all ydelser
