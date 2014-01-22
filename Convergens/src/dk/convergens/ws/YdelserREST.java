@@ -22,7 +22,7 @@ import dk.convergens.ydelse.Ydelse;
 public class YdelserREST {
 
 	// Gson for easy json output
-	Gson gson = new Gson();
+	//Gson gson = new Gson();
 
 	// List of all ydelser
 	private List<Ydelse> ydelser = null;
@@ -44,18 +44,33 @@ public class YdelserREST {
 
 	}
 
+	/**
+	 * <p>
+	 * Return all resources
+	 * </p>
+	 * 
+	 * @return List of JSON objects, if none, return null/undefined
+	 */
 	@GET
 	@Produces("application/json")
-	public String getAll() {
-		return gson.toJson(ydelser);
+	public List<Ydelse> getAll() {
+
+		if (ydelser.isEmpty())
+			return null;
+		else
+			return ydelser;
 	}
-	
+
 	/**
 	 * 
-	 * <p>Get resource by cpr</p>
+	 * <p>
+	 * Get resource by cpr
+	 * </p>
 	 * 
-	 * @param cpr the cpr number
-	 * @return
+	 * @param cpr
+	 *            the cpr number
+	 * @return List of JSON objects, if none, return null/undefined
+	 * 
 	 */
 	@GET
 	@Path("/{cpr}")
@@ -68,15 +83,23 @@ public class YdelserREST {
 			if (ydelse.getCpr().equals(cpr))
 				ydelserByCPR.add(ydelse);
 
-		return ydelserByCPR;
+		if (ydelserByCPR.isEmpty())
+			return null;
+		else
+			return ydelserByCPR;
 	}
-	
+
 	/**
-	 * <p>Get resource from type and cpr</p>
+	 * <p>
+	 * Get resource from type and cpr
+	 * </p>
 	 * 
-	 * @param type type of resource
-	 * @param cpr the cpr number
-	 * @return List of JSON objects
+	 * @param type
+	 *            type of resource
+	 * @param cpr
+	 *            the cpr number
+	 * @return List of JSON objects, if none, return null/undefined
+	 * 
 	 */
 	@GET
 	@Path("/{type}/{cpr}")
@@ -89,45 +112,33 @@ public class YdelserREST {
 		for (Ydelse ydelse : ydelser)
 			if (ydelse.getType().equals(type) && ydelse.getCpr().equals(cpr))
 				ydelserByTypeAndCPR.add(ydelse);
-		
-		if(ydelserByTypeAndCPR.isEmpty())
+
+		if (ydelserByTypeAndCPR.isEmpty())
 			return null;
 		else
 			return ydelserByTypeAndCPR;
 	}
 
-	/*
-	 * @POST public void add(@FormParam("createID") int id,
-	 * 
-	 * @FormParam("createCPR") String cpr,
-	 * 
-	 * @FormParam("createKr") int kr,
-	 * 
-	 * @FormParam("createDato") String dato,
-	 * 
-	 * @FormParam("createType") String type) {
-	 * 
-	 * ydelser.add(new Ydelse(id, cpr, kr, dato, type));
-	 * 
-	 * for(Ydelse y : ydelser) System.out.println(y);
-	 * 
-	 * }
-	 */
-	
 	/**
 	 * 
-	 * <p>Add a new resource</p>
+	 * <p>
+	 * Add a new resource
+	 * </p>
 	 * 
- 	 * @param cpr the cpr number
-	 * @param kr the price
-	 * @param dato the time of date
-	 * @param type type of resource
+	 * @param cpr
+	 *            the cpr number
+	 * @param kr
+	 *            the price
+	 * @param dato
+	 *            the time of date
+	 * @param type
+	 *            type of resource
 	 * @return JSON object with the newly created resource
 	 */
-	
+
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public String add(@FormParam("createCPR") String cpr,
+	public Ydelse add(@FormParam("createCPR") String cpr,
 			@FormParam("createKr") int kr,
 			@FormParam("createDato") String dato,
 			@FormParam("createType") String type) {
@@ -136,27 +147,34 @@ public class YdelserREST {
 
 		ydelser.add(y);
 
-		return gson.toJson(y);
+		return y;
 	}
 
-	
 	/**
 	 * 
-	 * <p>Updating resource with provided parameters. If Id doesn't exist, new resource will be created. Path{/id}</p>
+	 * <p>
+	 * Updating resource with provided parameters. If Id doesn't exist, new
+	 * resource will be created. Path{/id}
+	 * </p>
 	 * 
-	 * @param id resource identificaiton
-	 * @param cpr the cpr number
-	 * @param kr the price
-	 * @param dato the time of date
-	 * @param type type of resource
+	 * @param id
+	 *            resource identificaiton
+	 * @param cpr
+	 *            the cpr number
+	 * @param kr
+	 *            the price
+	 * @param dato
+	 *            the time of date
+	 * @param type
+	 *            type of resource
 	 * @return JSON object (with the updated/created data)
 	 * 
 	 */
-	
+
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String update(@PathParam("id") int id, @FormParam("cpr") String cpr,
+	public Ydelse update(@PathParam("id") int id, @FormParam("cpr") String cpr,
 			@FormParam("kr") int kr, @FormParam("dato") String dato,
 			@FormParam("type") String type) {
 
@@ -180,25 +198,27 @@ public class YdelserREST {
 			ydelser.add(y);
 		}
 
-		return gson.toJson(y);
+		return y;
 	}
-	
-	
-	
+
 	/**
 	 * 
-	 * <p>Deleting resource by id Path{/id}</p>
+	 * <p>
+	 * Deleting resource by id Path{/id}
+	 * </p>
 	 * 
-	 * @param id for deleting resource
+	 * @param id
+	 *            for deleting resource
 	 * @return JSON object (the deleted resource)
-	 * @throws NotFoundException if deleting not existing resource
+	 * @throws NotFoundException
+	 *             if deleting not existing resource
 	 * 
 	 * 
 	 */
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public String delete(@PathParam("id") int id) {
+	public Ydelse delete(@PathParam("id") int id) {
 
 		Ydelse y = null;
 		boolean found = false;
@@ -211,17 +231,13 @@ public class YdelserREST {
 				break;
 			}
 		}
-		
-		if(!found)
+
+		if (!found)
 			throw new NotFoundException("Ydelse not found");
-		
-		return gson.toJson(y);
+
+		return y;
 	}
 	
-	public void hej() {
-		
-		
-		
-	}
+	
 
 }
