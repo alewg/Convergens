@@ -96,25 +96,31 @@ public class YdelserREST {
 	 */
 
 	@POST
-	public void add(@FormParam("createCPR") String cpr,
+	public String add(@FormParam("createCPR") String cpr,
 			@FormParam("createKr") int kr,
 			@FormParam("createDato") String dato,
 			@FormParam("createType") String type) {
 
-		ydelser.add(new Ydelse(cpr, kr, dato, type));
+		Ydelse y = new Ydelse(cpr, kr, dato, type);
+
+		ydelser.add(y);
 
 		for (Ydelse ydelse : ydelser) {
 			System.out.println(ydelse);
 		}
+
+		return gson.toJson(y);
 	}
 
 	@PUT
 	@Path("/{id}")
-	public void update(@PathParam("id") int id, @FormParam("cpr") String cpr,
+	public String update(@PathParam("id") int id, @FormParam("cpr") String cpr,
 			@FormParam("kr") int kr, @FormParam("dato") String dato,
 			@FormParam("type") String type) {
 
 		boolean found = false;
+
+		Ydelse y = null;
 
 		for (Ydelse ydelse : ydelser) {
 			if (ydelse.getId() == id) {
@@ -122,26 +128,34 @@ public class YdelserREST {
 				ydelse.setDato(dato);
 				ydelse.setKr(kr);
 				ydelse.setType(type);
+				y = ydelse;
 				found = true;
 			}
 		}
 
-		if (!found)
-			ydelser.add(new Ydelse(id, cpr, kr, dato, type));
+		if (!found) {
+			y = new Ydelse(id, cpr, kr, dato, type);
+			ydelser.add(y);
+		}
 
+		return gson.toJson(y);
 	}
 
 	@DELETE
 	@Path("/{id}")
-	public void delete(@PathParam("id") int id) {
+	public String delete(@PathParam("id") int id) {
+
+		Ydelse y = null;
 
 		for (Ydelse ydelse : ydelser) {
 			if (ydelse.getId() == id) {
-				ydelser.remove(ydelse);
+				y = ydelse;
+				ydelser.remove(y);
 				break;
 			}
 		}
 
+		return gson.toJson(y);
 	}
 
 }
