@@ -1,8 +1,10 @@
 package dk.convergens.ws;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -13,37 +15,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import com.google.gson.Gson;
-
-import dk.convergens.ydelse.Ydelse;
+import dk.convergens.model.Ydelse;
+import dk.convergens.model.YdelseBean;
 
 @Path("/ydelser/")
 public class YdelserREST {
-
-	// Gson for easy json output
-	//Gson gson = new Gson();
-
-	// List of all ydelser
-	private List<Ydelse> ydelser = null;
-
-	public YdelserREST() {
-
-		if (ydelser == null) {
-			ydelser = new ArrayList<Ydelse>();
-		}
-
-		ydelser.add(new Ydelse(1, "2711900000", 199, "01-01-2014", "Ydelse1"));
-		ydelser.add(new Ydelse(2, "2711900000", 99, "01-01-2013", "Ydelse2"));
-		ydelser.add(new Ydelse(3, "0109720000", 10, "01-01-2012", "Ydelse1"));
-		ydelser.add(new Ydelse(4, "1007680000", 50, "01-01-2014", "Ydelse3"));
-		ydelser.add(new Ydelse(5, "1511530000", 200, "01-01-2012", "Ydelse4"));
-		ydelser.add(new Ydelse(6, "2004660000", 90, "01-01-2013", "Ydelse3"));
-		ydelser.add(new Ydelse(7, "2905780000", 200, "01-01-2014", "Ydelse2"));
-		ydelser.add(new Ydelse(8, "0312830000", 1000, "01-01-2014", "Ydelse5"));
-
-	}
-
+	
+	@Inject
+	YdelseBean ydelser;
+	
 	/**
 	 * <p>
 	 * Return all resources
@@ -54,11 +36,11 @@ public class YdelserREST {
 	@GET
 	@Produces("application/json")
 	public List<Ydelse> getAll() {
-
-		if (ydelser.isEmpty())
+		
+		if (ydelser.getYdelser().isEmpty())
 			return null;
 		else
-			return ydelser;
+			return ydelser.getYdelser();
 	}
 
 	/**
@@ -79,7 +61,7 @@ public class YdelserREST {
 
 		List<Ydelse> ydelserByCPR = new ArrayList<Ydelse>();
 
-		for (Ydelse ydelse : ydelser)
+		for (Ydelse ydelse : ydelser.getYdelser())
 			if (ydelse.getCpr().equals(cpr))
 				ydelserByCPR.add(ydelse);
 
@@ -109,7 +91,7 @@ public class YdelserREST {
 
 		List<Ydelse> ydelserByTypeAndCPR = new ArrayList<Ydelse>();
 
-		for (Ydelse ydelse : ydelser)
+		for (Ydelse ydelse : ydelser.getYdelser())
 			if (ydelse.getType().equals(type) && ydelse.getCpr().equals(cpr))
 				ydelserByTypeAndCPR.add(ydelse);
 
@@ -133,25 +115,26 @@ public class YdelserREST {
 	 *            the time of date
 	 * @param type
 	 *            type of resource
-	 * @return JSON object with the newly created resource
+	 * @return response with location of the created resource
 	 */
-
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Ydelse add(@FormParam("createCPR") String cpr,
+	public Response add(@FormParam("createCPR") String cpr,
 			@FormParam("createKr") int kr,
 			@FormParam("createDato") String dato,
 			@FormParam("createType") String type) {
 
+		
+		int id = 0;
+		
 		Ydelse y = new Ydelse(cpr, kr, dato, type);
 
-		ydelser.add(y);
+		ydelser.getYdelser().add(y);
 
-		return y;
+		return Response.created(URI.create("rest/ydelser/"+id)).build();
 	}
 
 	/**
-	 * 
 	 * <p>
 	 * Updating resource with provided parameters. If Id doesn't exist, new
 	 * resource will be created. Path{/id}
@@ -167,14 +150,12 @@ public class YdelserREST {
 	 *            the time of date
 	 * @param type
 	 *            type of resource
-	 * @return JSON object (with the updated/created data)
-	 * 
+	 * @return if updated return ok, if created return response with the new location
 	 */
-
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Ydelse update(@PathParam("id") int id, @FormParam("cpr") String cpr,
+	public Response update(@PathParam("id") int id, @FormParam("cpr") String cpr,
 			@FormParam("kr") int kr, @FormParam("dato") String dato,
 			@FormParam("type") String type) {
 
@@ -182,7 +163,7 @@ public class YdelserREST {
 
 		Ydelse y = null;
 
-		for (Ydelse ydelse : ydelser) {
+		for (Ydelse ydelse : ydelser.getYdelser()) {
 			if (ydelse.getId() == id) {
 				ydelse.setCpr(cpr);
 				ydelse.setDato(dato);
@@ -195,14 +176,15 @@ public class YdelserREST {
 
 		if (!found) {
 			y = new Ydelse(id, cpr, kr, dato, type);
-			ydelser.add(y);
+			ydelser.getYdelser().add(y);
+			return Response.created(URI.create("rest/ydelser/"+id)).build();
+		} else {
+			return Response.ok(y).build();
 		}
 
-		return y;
 	}
 
 	/**
-	 * 
 	 * <p>
 	 * Deleting resource by id Path{/id}
 	 * </p>
@@ -213,7 +195,6 @@ public class YdelserREST {
 	 * @throws NotFoundException
 	 *             if deleting not existing resource
 	 * 
-	 * 
 	 */
 	@DELETE
 	@Path("/{id}")
@@ -223,11 +204,11 @@ public class YdelserREST {
 		Ydelse y = null;
 		boolean found = false;
 
-		for (Ydelse ydelse : ydelser) {
+		for (Ydelse ydelse : ydelser.getYdelser()) {
 			if (ydelse.getId() == id) {
 				y = ydelse;
 				found = true;
-				ydelser.remove(y);
+				ydelser.getYdelser().remove(y);
 				break;
 			}
 		}
@@ -237,7 +218,5 @@ public class YdelserREST {
 
 		return y;
 	}
-	
-	
 
 }

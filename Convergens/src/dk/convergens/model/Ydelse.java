@@ -1,10 +1,13 @@
-package dk.convergens.ydelse;
+package dk.convergens.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
 public class Ydelse {
 	
+	@Id
 	private int id;
-	
 	private String cpr;
 	private int kr;
 	private String dato;
@@ -18,6 +21,7 @@ public class Ydelse {
 		this.kr = kr;
 		this.dato = dato;
 		this.type = type;
+		System.out.println("Entity created");
 	}
 	
 	public Ydelse(String cpr, int kr, String dato, String type) {
@@ -66,7 +70,7 @@ public class Ydelse {
 	public void setType(String type) {
 		this.type = type;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "Ydelse [id=" + id + ", cpr=" + cpr + ", kr=" + kr + ", dato="

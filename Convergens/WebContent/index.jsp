@@ -1,66 +1,73 @@
-<%@ page language="java" contentType="text/html; charset=US-ASCII"
-	pageEncoding="US-ASCII"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Flot titel!!!</title>
 <script
 	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
 <body>
 
-	<div style="background-color: #f9f; float: left; padding: 20px;">
-		<button name="all">Alle ydelser</button>
-		<br /> <br /> CPR: <input type="text" name="cpr" value="2711900000" />
-		<button name="getYdelserByCPR">Find ydelser med CPR</button>
-		<br /> Type: <input type="text" name="type" value="Ydelse1" /> <br />
-		<button name="getYdelserByTypeAndCPR">Find ydelser med type
-			og CPR</button>
+	<div style="overflow: hidden;">
+
+		<div style="background-color: #f9f; float: left; padding: 20px;">
+			<button name="all">Alle ydelser</button>
+			<br /> <br /> CPR: <input type="text" name="cpr" value="2711900000" />
+			<button name="getYdelserByCPR">Find ydelser med CPR</button>
+			<br /> Type: <input type="text" name="type" value="Ydelse1" /> <br />
+			<button name="getYdelserByTypeAndCPR">Find ydelser med type
+				og CPR</button>
+		</div>
+
+		<div style="background-color: #9f9; float: left; padding: 20px;">
+			<form id="postForm">
+				<table>
+					<tr>
+						<td>ID:</td>
+						<td><input type="text" name="createID" /></td>
+					</tr>
+					<tr>
+						<td>CPR:</td>
+						<td><input type="text" name="createCPR" value="2711900000" /></td>
+					</tr>
+					<tr>
+						<td>Kr:</td>
+						<td><input type="number" name="createKr" value="499" /></td>
+					</tr>
+					<tr>
+						<td>Dato:</td>
+						<td><input type="text" name="createDato" value="21012014" /></td>
+					</tr>
+					<tr>
+						<td>Type:</td>
+						<td><input type="text" name="createType" value="Ydelse1" /></td>
+					</tr>
+					<tr>
+						<td colspan="2"><input
+							style="width: 100%; float: right; font-size: 400%;" type="submit"
+							name="postSubmit" value="submit it baby" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+		<div style="background-color: #ccc; float: left; padding: 20px;">
+			<form id="deleteForm">
+				<input type="number" name="delete" /> <input type="submit"
+					name="deletBtn" value="Delete" />
+			</form>
+		</div>
+
 	</div>
 
-	<div style="background-color: #9f9; float: left; padding: 20px;">
-		<form id="postForm">
-			<table>
-				<tr>
-					<td>ID:</td>
-					<td><input type="text" name="createID" /></td>
-				</tr>
-				<tr>
-					<td>CPR:</td>
-					<td><input type="text" name="createCPR" value="2711900000" /></td>
-				</tr>
-				<tr>
-					<td>Kr:</td>
-					<td><input type="number" name="createKr" value="499" /></td>
-				</tr>
-				<tr>
-					<td>Dato:</td>
-					<td><input type="text" name="createDato" value="21012014" /></td>
-				</tr>
-				<tr>
-					<td>Type:</td>
-					<td><input type="text" name="createType" value="Ydelse1" /></td>
-				</tr>
-				<tr>
-					<td colspan="2"><input
-						style="width: 100%; float: right; font-size: 400%;" type="submit"
-						name="postSubmit" value="submit it baby" /></td>
-				</tr>
-			</table>
-		</form>
+	<div style="background-color: #000">
+
+		<ul></ul>
+
 	</div>
 
-	<div style="background-color: #ccc; float: left; padding: 20px;">
-		<form id="deleteForm">
-			<input type="number" name="delete" /> <input type="submit"
-				name="deletBtn" value="Delete" />
-		</form>
-	</div>
-	
-	
-	
-	
 	<script>
 		$(document).ready(function() {
 
@@ -71,7 +78,7 @@
 
 				$.ajax({
 					url : "rest/ydelser/" + id,
-					type: "delete"
+					type : "delete"
 				});
 			});
 
@@ -111,8 +118,14 @@
 					url : "rest/ydelser",
 					type : "get",
 					contentType : "application/json"
-				}).done(function(data) {
-					console.log(data);
+				}).success(function(data) {
+					$("div ul").empty();
+					$(data).each(function(i) {
+						$("div ul").append("<li style='color: #fff;'>ID#"+data[i].id+" CPR:"+data[i].cpr+" har købt Ydelse: "+data[i].type+" for "+data[i].kr+" Kroner.</li>");
+					});
+					
+				}).done(function() {
+					//console.log(data);
 				});
 			});
 
@@ -124,7 +137,10 @@
 				var cpr = $("input[name='cpr']").val();
 
 				$.getJSON("rest/ydelser/" + cpr, function(data) {
-					console.log(data);
+					$("div ul").empty();
+					$(data).each(function(i) {
+						$("div ul").append("<li style='color: #fff;'>ID#"+data[i].id+" CPR:"+data[i].cpr+" har købt Ydelse: "+data[i].type+" for "+data[i].kr+" Kroner.</li>");
+					});
 				});
 
 			});
@@ -140,7 +156,10 @@
 				var type = $("input[name='type']").val();
 
 				$.getJSON("rest/ydelser/" + type + "/" + cpr, function(data) {
-					console.log(data);
+					$("div ul").empty();
+					$(data).each(function(i) {
+						$("div ul").append("<li style='color: #fff;'>ID#"+data[i].id+" CPR:"+data[i].cpr+" har købt Ydelse: "+data[i].type+" for "+data[i].kr+" Kroner.</li>");
+					});
 				});
 
 			});
