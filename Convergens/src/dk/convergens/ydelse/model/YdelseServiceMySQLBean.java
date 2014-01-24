@@ -9,8 +9,8 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class YdelseServiceMySQLBean implements YdelseService {
 	
-	@PersistenceContext
-	EntityManager em;
+	//@PersistenceContext
+	//EntityManager em;
 	
 	@PostConstruct
 	public void init() {
