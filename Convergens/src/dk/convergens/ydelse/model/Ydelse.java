@@ -1,4 +1,4 @@
-package dk.convergens.model;
+package dk.convergens.ydelse.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

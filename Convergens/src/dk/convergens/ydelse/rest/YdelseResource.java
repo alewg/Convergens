@@ -1,4 +1,4 @@
-package dk.convergens.ws;
+package dk.convergens.ydelse.rest;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -17,12 +17,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import dk.convergens.model.Ydelse;
-import dk.convergens.model.YdelseService;
-import dk.convergens.model.YdelseServiceBean;
+import dk.convergens.ydelse.model.Ydelse;
+import dk.convergens.ydelse.model.YdelseService;
+import dk.convergens.ydelse.model.YdelseServiceBean;
 
 @Path("/ydelser/")
-public class YdelserREST {
+public class YdelseResource {
 
 	@Inject
 	YdelseService ydelseService;

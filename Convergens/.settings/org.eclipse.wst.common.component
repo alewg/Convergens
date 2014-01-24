@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="Convergens">
+    <wb-module deploy-name="dk.convergens.ydelse">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="java-output-path" value="/Convergens/build/classes"/>
-        <property name="context-root" value="Convergens"/>
+        <property name="java-output-path" value="/dk.convergens.ydelse/build/classes"/>
+        <property name="context-root" value="dk.convergens.ydelse"/>
     </wb-module>
 </project-modules>

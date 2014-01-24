@@ -1,4 +1,4 @@
-package dk.convergens.model;
+package dk.convergens.ydelse.model;
 
 public interface YdelseService {
 
