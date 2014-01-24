@@ -1,7 +1,6 @@
 package dk.convergens.ydelse.rest;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -19,7 +18,6 @@ import javax.ws.rs.core.Response;
 
 import dk.convergens.ydelse.model.Ydelse;
 import dk.convergens.ydelse.model.YdelseService;
-import dk.convergens.ydelse.model.YdelseServiceBean;
 
 @Path("/ydelser/")
 public class YdelseResource {

@@ -5,10 +5,9 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
 
 @Stateless
-public class YdelseServiceBean implements YdelseService {
+public class YdelseServiceBean /* implements YdelseService */ {
 
 	private List<Ydelse> ydelser = new ArrayList<Ydelse>();
 
@@ -25,14 +24,12 @@ public class YdelseServiceBean implements YdelseService {
 		System.out.println("Ydelser created.");
 	}
 
-	@Override
 	public <T> T create(T t) {
 		ydelser.add((Ydelse) t);
 		return (T) t;
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public <T> T find(Class<T> type, Object id /* id = cpr */) {
 
 		List<Ydelse> y = new ArrayList<Ydelse>();
@@ -71,7 +68,6 @@ public class YdelseServiceBean implements YdelseService {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public <T> T update(T t) {
 
 		Ydelse y = (Ydelse) t;
@@ -90,7 +86,6 @@ public class YdelseServiceBean implements YdelseService {
 		return null;
 	}
 
-	@Override
 	public void delete(Class type, Object id) {
 
 		for (Ydelse ydelse : ydelser) {
