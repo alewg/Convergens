@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Flot titel!!!</title>
+<title>En titel</title>
 <script
 	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 </head>
@@ -38,7 +38,7 @@
 					</tr>
 					<tr>
 						<td>Dato:</td>
-						<td><input type="text" name="createDato" value="21012014" /></td>
+						<td><input type="text" name="createDato" value="21-01-2014" /></td>
 					</tr>
 					<tr>
 						<td>Type:</td>
@@ -47,7 +47,7 @@
 					<tr>
 						<td colspan="2"><input
 							style="width: 100%; float: right; font-size: 400%;" type="submit"
-							name="postSubmit" value="submit it baby" /></td>
+							name="postSubmit" value="submit" /></td>
 					</tr>
 				</table>
 			</form>
