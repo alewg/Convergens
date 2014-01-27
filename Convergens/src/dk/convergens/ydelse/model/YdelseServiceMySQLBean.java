@@ -25,7 +25,7 @@ public class YdelseServiceMySQLBean implements YdelseService {
 	@Override
 	public <T> T create(T t) {
 		em.persist(t);
-		System.out.println("Entity created: " + t);
+		em.flush();
 		return t;
 	}
 
