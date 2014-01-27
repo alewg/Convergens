@@ -45,18 +45,20 @@ public class YdelseServiceMySQLBean implements YdelseService {
 		em.remove(obj);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List findWithNamedQuery(String namedQueryName) {
+	public <T> List<T> findWithNamedQuery(String namedQueryName) {
 		return em.createNamedQuery(namedQueryName).getResultList();
 	}
 
 	@Override
-	public List findWithNamedQuery(String namedQueryName, Map<String, Object> parameters) {
+	public <T> List<T> findWithNamedQuery(String namedQueryName, Map<String, Object> parameters) {
 		return findWithNamedQuery(namedQueryName, parameters, 0);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List findWithNamedQuery(String namedQueryName, Map<String, Object> parameters, int resultLimit) {
+	public <T> List<T> findWithNamedQuery(String namedQueryName, Map<String, Object> parameters, int resultLimit) {
 		Set<Entry<String, Object>> rawParameters = parameters.entrySet();
 		Query query = this.em.createNamedQuery(namedQueryName);
 		if (resultLimit > 0)

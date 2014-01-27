@@ -9,11 +9,11 @@ public interface YdelseService {
 
 	public <T> T find(Class<T> type, Object id);
 
-	public List findWithNamedQuery(String namedQueryName);
+	public <T> List<T> findWithNamedQuery(String namedQueryName);
 
-	public List findWithNamedQuery(String namedQueryName, Map<String, Object> parameters);
+	public <T> List<T> findWithNamedQuery(String namedQueryName, Map<String, Object> parameters);
 	
-	public List findWithNamedQuery(String namedQueryName, Map<String,Object> parameters,int resultLimit);
+	public <T> List<T> findWithNamedQuery(String namedQueryName, Map<String,Object> parameters,int resultLimit);
 
 	public <T> T update(T t);
 

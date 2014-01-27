@@ -11,13 +11,12 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "test")
 @NamedQueries({
 		@NamedQuery(name = "Ydelse.findAll", query = "SELECT c FROM Ydelse c"),
 		@NamedQuery(name = "Ydelse.findByCPR", query = "SELECT c FROM Ydelse c WHERE c.cpr = :cpr"),
 		@NamedQuery(name = "Ydelse.findByTypeAndCPR", query = "SELECT c FROM Ydelse c WHERE c.type = :type AND c.cpr = :cpr") })
 public class Ydelse implements Serializable {
-
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id
