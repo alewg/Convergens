@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources xmlns="http://www.jboss.org/ironjacamar/schema">
+ <datasource jndi-name="java:jboss/datasources/YdelseDS" enabled="true" 
+     use-java-context="true" pool-name="YdelseDS">
+  <connection-url>jdbc:mysql://localhost:3306/</connection-url>
+  <driver>mysql-connector-java-5.1.25-bin.jar</driver>
+  <pool></pool>
+  <security>
+   <user-name>alewge</user-name>
+   <password></password>
+  </security>
+ </datasource>
+</datasources>

@@ -1,7 +1,9 @@
 package dk.convergens.ydelse.rest;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.ws.rs.DELETE;
@@ -35,7 +37,7 @@ public class YdelseResource {
 	@GET
 	@Produces("application/json")
 	public List<Ydelse> getAll() {
-		return ydelseService.find();
+		return ydelseService.findWithNamedQuery("Ydelse.findAll");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -54,7 +56,12 @@ public class YdelseResource {
 	@Path("/{cpr}")
 	@Produces("application/json")
 	public List<Ydelse> getYdelserByCPR(@PathParam("cpr") String cpr) {
-		return (List<Ydelse>) ydelseService.find(Ydelse.class, cpr);
+
+		Map param = new HashMap<>();
+
+		param.put("cpr", cpr);
+
+		return ydelseService.findWithNamedQuery("Ydelse.findByCPR", param);
 	}
 
 	/**
@@ -73,9 +80,14 @@ public class YdelseResource {
 	@GET
 	@Path("/{type}/{cpr}")
 	@Produces("application/json")
-	public List<Ydelse> getYdelserByTypeAndCPR(@PathParam("type") String type,
-			@PathParam("cpr") String cpr) {
-		return (List<Ydelse>) ydelseService.find(Ydelse.class, type, cpr);
+	public List<Ydelse> getYdelserByTypeAndCPR(@PathParam("type") String type, @PathParam("cpr") String cpr) {
+
+		Map param = new HashMap<>();
+
+		param.put("type", type);
+		param.put("cpr", cpr);
+
+		return ydelseService.findWithNamedQuery("Ydelse.findByTypeAndCPR", param);
 	}
 
 	/**
@@ -96,17 +108,15 @@ public class YdelseResource {
 	 */
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response add(@FormParam("createCPR") String cpr,
-			@FormParam("createKr") int kr,
-			@FormParam("createDato") String dato,
-			@FormParam("createType") String type) {
+	public Response add(@FormParam("createCPR") String cpr, @FormParam("createKr") int kr,
+			@FormParam("createDato") String dato, @FormParam("createType") String type) {
 
-		// Bliver fixet i databasen
-		int id = 0;
+		// create id
+		Long id = 0L;
 
-		Ydelse y = new Ydelse(id, cpr, kr, dato, type);
-		ydelseService.create(y);
-		return Response.created(URI.create("ydelser/" + id)).build();
+		Ydelse y = ydelseService.create(new Ydelse(id, cpr, kr, dato, type));
+
+		return Response.created(URI.create("ydelser/" + y.getId())).build();
 	}
 
 	/**
@@ -131,8 +141,7 @@ public class YdelseResource {
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response update(@PathParam("id") int id,
-			@FormParam("cpr") String cpr, @FormParam("kr") int kr,
+	public Response update(@PathParam("id") Long id, @FormParam("cpr") String cpr, @FormParam("kr") int kr,
 			@FormParam("dato") String dato, @FormParam("type") String type) {
 
 		Ydelse y = new Ydelse(id, cpr, kr, dato, type);
@@ -155,7 +164,7 @@ public class YdelseResource {
 	@DELETE
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void delete(@PathParam("id") Integer id) {
+	public void delete(@PathParam("id") Long id) {
 		ydelseService.delete(Ydelse.class, id);
 	}
 
