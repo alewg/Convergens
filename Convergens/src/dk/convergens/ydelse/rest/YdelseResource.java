@@ -40,7 +40,6 @@ public class YdelseResource {
 		return ydelseService.findWithNamedQuery("Ydelse.findAll");
 	}
 
-	@SuppressWarnings("unchecked")
 	/**
 	 *
 	 * <p>
@@ -57,7 +56,7 @@ public class YdelseResource {
 	@Produces("application/json")
 	public List<Ydelse> getYdelserByCPR(@PathParam("cpr") String cpr) {
 
-		Map param = new HashMap<>();
+		Map<String, Object> param = new HashMap<String, Object>();
 
 		param.put("cpr", cpr);
 
@@ -76,13 +75,12 @@ public class YdelseResource {
 	 * @return List of JSON objects, if none, return null/undefined
 	 * 
 	 */
-	@SuppressWarnings("unchecked")
 	@GET
 	@Path("/{type}/{cpr}")
 	@Produces("application/json")
 	public List<Ydelse> getYdelserByTypeAndCPR(@PathParam("type") String type, @PathParam("cpr") String cpr) {
 
-		Map param = new HashMap<>();
+		Map<String, Object> param = new HashMap<String, Object>();
 
 		param.put("type", type);
 		param.put("cpr", cpr);
