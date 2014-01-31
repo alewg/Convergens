@@ -45,9 +45,12 @@
 						<td><input type="text" name="createType" value="Ydelse1" /></td>
 					</tr>
 					<tr>
+
 						<td colspan="2"><input
 							style="width: 100%; float: right; font-size: 400%;" type="submit"
-							name="postSubmit" value="submit" /></td>
+							name="postSubmit" value="post" /><input
+							style="width: 100%; float: right; font-size: 400%;" type="submit"
+							name="putSubmit" value="put" /></td>
 					</tr>
 				</table>
 			</form>
@@ -63,9 +66,7 @@
 	</div>
 
 	<div style="background-color: #000">
-
 		<ul></ul>
-
 	</div>
 
 	<script>
@@ -82,31 +83,31 @@
 				});
 			});
 
-			//Update or create resource depending on, that id is provided
-			$("#postForm").submit(function(event) {
+			$("input[name='postSubmit']").click(function(e) {
+				e.preventDefault();
+				$.post("rest/ydelser", $("#postForm").serialize());
+			});
 
-				event.preventDefault();
+			$("input[name='putSubmit']").click(function(e) {
 
+				e.preventDefault();
+				
 				var id = $("input[name='createID']").val();
 				var cpr = $("input[name='createCPR']").val();
 				var kr = $("input[name='createKr']").val();
 				var dato = $("input[name='createDato']").val();
 				var type = $("input[name='createType']").val();
 
-				if (!$.isNumeric(id)) {
-					$.post("rest/ydelser", $("#postForm").serialize());
-				} else {
-					$.ajax({
-						url : "rest/ydelser/" + id,
-						type : "put",
-						data : {
-							cpr : cpr,
-							kr : kr,
-							dato : dato,
-							type : type
-						}
-					});
-				}
+				$.ajax({
+					url : "rest/ydelser/" + id,
+					type : "put",
+					data : {
+						cpr : cpr,
+						kr : kr,
+						dato : dato,
+						type : type
+					}
+				});
 			});
 
 			/*** PINK ACTIONS ***/
@@ -121,9 +122,9 @@
 				}).success(function(data) {
 					$("div ul").empty();
 					$(data).each(function(i) {
-						$("div ul").append("<li style='color: #fff;'>ID#"+data[i].id+" CPR:"+data[i].cpr+" har købt Ydelse: "+data[i].type+" for "+data[i].kr+" Kroner.</li>");
+						$("div ul").append("<li style='color: #fff;'>ID#" + data[i].id + " CPR:" + data[i].cpr + " har købt Ydelse: " + data[i].type + " for " + data[i].kr + " Kroner.</li>");
 					});
-					
+
 				}).done(function() {
 					//console.log(data);
 				});
@@ -139,7 +140,7 @@
 				$.getJSON("rest/ydelser/" + cpr, function(data) {
 					$("div ul").empty();
 					$(data).each(function(i) {
-						$("div ul").append("<li style='color: #fff;'>ID#"+data[i].id+" CPR:"+data[i].cpr+" har købt Ydelse: "+data[i].type+" for "+data[i].kr+" Kroner.</li>");
+						$("div ul").append("<li style='color: #fff;'>ID#" + data[i].id + " CPR:" + data[i].cpr + " har købt Ydelse: " + data[i].type + " for " + data[i].kr + " Kroner.</li>");
 					});
 				});
 
@@ -158,7 +159,7 @@
 				$.getJSON("rest/ydelser/" + type + "/" + cpr, function(data) {
 					$("div ul").empty();
 					$(data).each(function(i) {
-						$("div ul").append("<li style='color: #fff;'>ID#"+data[i].id+" CPR:"+data[i].cpr+" har købt Ydelse: "+data[i].type+" for "+data[i].kr+" Kroner.</li>");
+						$("div ul").append("<li style='color: #fff;'>ID#" + data[i].id + " CPR:" + data[i].cpr + " har købt Ydelse: " + data[i].type + " for " + data[i].kr + " Kroner.</li>");
 					});
 				});
 
