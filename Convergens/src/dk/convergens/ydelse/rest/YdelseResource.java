@@ -71,15 +71,6 @@ public class YdelseResource extends Application {
 	 */
 	@Inject
 	EntityNotFoundExceptionHandler enfeh;
-	
-	/**
-	 * TEST FIXME
-	 * 
-	 * @param ydelseService
-	 */
-	public void setInterface(YdelseService ydelseService) {
-		this.ydelseService = ydelseService;
-	}
 
 	/**
 	 * <p>

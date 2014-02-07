@@ -1,6 +1,6 @@
 package dk.convergens.ydelse.model.test;
 
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.doReturn;
 
 import javax.ejb.EJBException;
 import javax.persistence.EntityManager;
@@ -14,9 +14,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import static org.mockito.Mockito.*;
-
 import org.mockito.runners.MockitoJUnitRunner;
 
 import dk.convergens.ydelse.model.Ydelse;

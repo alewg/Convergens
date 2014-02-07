@@ -39,10 +39,11 @@ public class YdelseServiceBean implements YdelseService {
 	public void init() {
 	}
 	
-	public EntityManager getEntityManager() {
-		return em;
-	}
-	
+	/**
+	 * Used for testing.
+	 * 
+	 * @param EntityManager
+	 */
 	public void setEntityManager(EntityManager entityManager) {
 		this.em = entityManager;
 	}
@@ -55,7 +56,8 @@ public class YdelseServiceBean implements YdelseService {
 	 *            Object T.
 	 * 
 	 * @return T The created object.
-	 * @throw {@link EJBException}
+	 * @throws {@link EJBException}
+	 * 
 	 */
 	@Override
 	public <T> T create(T t) {
@@ -106,7 +108,7 @@ public class YdelseServiceBean implements YdelseService {
 	 * 
 	 * @return Returns the updated entity.
 	 * 
-	 * @throw EnityNotFoundException
+	 * @throws EnityNotFoundException
 	 */
 	@Override
 	public <T> T update(T t) {
@@ -164,8 +166,8 @@ public class YdelseServiceBean implements YdelseService {
 	 * 
 	 * @return Return the results generated from the query.
 	 * 
-	 * @throw NullPointerException
-	 * @throw EJBException
+	 * @throws NullPointerException
+	 * @throws EJBException
 	 * 
 	 */
 	@SuppressWarnings("unchecked")
@@ -200,8 +202,8 @@ public class YdelseServiceBean implements YdelseService {
 	 * 
 	 * @return Return result list
 	 * 
-	 * @throw NullPointerException
-	 * @throw EJBException
+	 * @throws NullPointerException
+	 * @throws EJBException
 	 * 
 	 */
 	@Override
