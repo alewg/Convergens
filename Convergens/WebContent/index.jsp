@@ -122,7 +122,7 @@
 				}).success(function(data) {
 					$("div ul").empty();
 					$(data).each(function(i) {
-						$("div ul").append("<li style='color: #fff;'>ID#"+ data[i] + data[i].id + " CPR:" + data[i].cpr + " har købt Ydelse: " + data[i].type + " for " + data[i].kr + " Kroner.</li>");
+						$("div ul").append("<li style='color: #fff;'>ID#" + data[i].id + " CPR:" + data[i].cpr + " har købt Ydelse: " + data[i].type + " for " + data[i].kr + " Kroner.</li>");
 					});
 
 				}).done(function() {
