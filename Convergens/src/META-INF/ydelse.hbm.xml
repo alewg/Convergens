@@ -2,9 +2,16 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
                                    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
- <query name="Ydelse.findAll">SELECT c FROM Ydelse c</query>
- <query name="Ydelse.findByCPR">SELECT c FROM Ydelse c WHERE c.cpr = :cpr</query>
- <query name="Ydelse.findByTypeAndCPR">SELECT c FROM Ydelse c WHERE c.type = :type AND c.cpr = :cpr</query>
+
+	<!-- Selects all ydelser -->
+	<query name="Ydelse.findAll">SELECT c FROM Ydelse c</query>
+
+	<!-- Selects all ydelser with a specific cpr -->
+	<query name="Ydelse.findByCPR">SELECT c FROM Ydelse c WHERE c.cpr = :cpr</query>
+
+	<!-- Selects all ydelser with a specific cpr and type -->
+	<query name="Ydelse.findByTypeAndCPR">SELECT c FROM Ydelse c WHERE c.type = :type AND c.cpr = :cpr</query>
+
 </hibernate-mapping>
 
 
