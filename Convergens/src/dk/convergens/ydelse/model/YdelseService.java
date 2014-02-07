@@ -3,7 +3,7 @@ package dk.convergens.ydelse.model;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.NotFoundException;
+import javax.persistence.EntityManager;
 
 /**
  * 
@@ -12,7 +12,7 @@ import javax.ws.rs.NotFoundException;
  */
 
 public interface YdelseService {
-
+	
 	/**
 	 * Creates an entity.
 	 * 

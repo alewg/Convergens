@@ -21,10 +21,10 @@ import javax.persistence.NamedQuery;
 // TODO Documentation for java doc!
 // TODO Create J-Unit test!
 // TODO Create logging if something goes wrong!
-@NamedQueries({
-		@NamedQuery(name = "Ydelse.findAll", query = "SELECT c FROM Ydelse c"),
-		@NamedQuery(name = "Ydelse.findByCPR", query = "SELECT c FROM Ydelse c WHERE c.cpr = :cpr"),
-		@NamedQuery(name = "Ydelse.findByTypeAndCPR", query = "SELECT c FROM Ydelse c WHERE c.type = :type AND c.cpr = :cpr") })
+//@NamedQueries({
+//		@NamedQuery(name = "Ydelse.findAll", query = "SELECT c FROM Ydelse c"),
+//		@NamedQuery(name = "Ydelse.findByCPR", query = "SELECT c FROM Ydelse c WHERE c.cpr = :cpr"),
+//		@NamedQuery(name = "Ydelse.findByTypeAndCPR", query = "SELECT c FROM Ydelse c WHERE c.type = :type AND c.cpr = :cpr") })
 public class Ydelse implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -60,6 +60,23 @@ public class Ydelse implements Serializable {
 		this.type = type;
 	}
 	
+	/**
+	 * 
+	 * Use this constructor for creating new ydelses objects. Id is set to null.
+	 * 
+	 * @param cpr
+	 * @param kr
+	 * @param dato
+	 * @param type
+	 */
+	public Ydelse(String cpr, int kr, String dato, String type) {
+		this.id = null;
+		this.cpr = cpr;
+		this.kr = kr;
+		this.dato = dato;
+		this.type = type;
+	}
+
 	/**
 	 * 
 	 * Returns the id.

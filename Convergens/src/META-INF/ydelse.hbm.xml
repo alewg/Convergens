@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+ <query name="Ydelse.findAll">SELECT c FROM Ydelse c</query>
+ <query name="Ydelse.findByCPR">SELECT c FROM Ydelse c WHERE c.cpr = :cpr</query>
+ <query name="Ydelse.findByTypeAndCPR">SELECT c FROM Ydelse c WHERE c.type = :type AND c.cpr = :cpr</query>
+</hibernate-mapping>
+
+
+<!-- SQL Query is also an possibility. -->

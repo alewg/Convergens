@@ -10,6 +10,7 @@ import javax.ejb.EJBException;
 import javax.inject.Inject;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -19,6 +20,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -28,6 +30,7 @@ import dk.convergens.ydelse.exception.PersistenceExceptionHandler;
 import dk.convergens.ydelse.exception.NotFoundExceptionHandler;
 import dk.convergens.ydelse.model.Ydelse;
 import dk.convergens.ydelse.model.YdelseService;
+import dk.convergens.ydelse.model.YdelseServiceBean;
 
 /**
  * 
@@ -36,8 +39,9 @@ import dk.convergens.ydelse.model.YdelseService;
  * 
  */
 @Produces(MediaType.APPLICATION_JSON)
+@ApplicationPath("rest")
 @Path("/ydelser/")
-public class YdelseResource {
+public class YdelseResource extends Application {
 
 	/**
 	 * Logger
@@ -67,6 +71,15 @@ public class YdelseResource {
 	 */
 	@Inject
 	EntityNotFoundExceptionHandler enfeh;
+	
+	/**
+	 * TEST FIXME
+	 * 
+	 * @param ydelseService
+	 */
+	public void setInterface(YdelseService ydelseService) {
+		this.ydelseService = ydelseService;
+	}
 
 	/**
 	 * <p>
@@ -91,7 +104,7 @@ public class YdelseResource {
 			ydelser = ydelseService.findWithNamedQuery("Ydelse.findAll");
 			return Response.ok(ydelser).build();
 		} catch (EJBException ejbe) {
-
+			
 			// Check EJBException to be NotFoundException
 			if (ejbe.getCausedByException().getClass().getSimpleName().equals(NotFoundException.class.getSimpleName()))
 
@@ -103,7 +116,13 @@ public class YdelseResource {
 
 				// Return PersistenceExceptionHandler
 				return peh.toResponse(ejbe);
+			
+			//Check EJBException to be NullPointerException
+			else if (ejbe.getCausedByException().getClass().getSimpleName().equals(NullPointerException.class.getSimpleName()))
 
+				//Return response
+				return Response.status(Status.NOT_FOUND).build();
+				
 			// Not specified Exceptions
 			else
 
@@ -225,9 +244,10 @@ public class YdelseResource {
 	 *            The date
 	 * @param type
 	 *            Type of resource
-	 * @return Response object with URI to new ydelse.
+	 *            
+	 * @return Response Created 201
 	 * 
-	 * @throw PersistenceException
+	 * @return Response Internal Server Error 500 - PersistenceException
 	 */
 	@POST
 	public Response add(@FormParam("createCPR") String cpr, @FormParam("createKr") int kr, @FormParam("createDato") String dato,
@@ -236,7 +256,7 @@ public class YdelseResource {
 		Ydelse y = null;
 
 		try {
-			y = ydelseService.create(new Ydelse(null, cpr, kr, dato, type));
+			y = ydelseService.create(new Ydelse(cpr, kr, dato, type));
 		} catch (EJBException ejbe) {
 
 			// PersistenceException
@@ -265,10 +285,10 @@ public class YdelseResource {
 	 *            The date
 	 * @param type
 	 *            Resource type
-	 * @return Response OK
-	 * @return EntityNotFoundException if entity doesn't exist.
-	 * @return PersistenceException if updating went wrong.
-	 * @return Error code 500 if there is an internal error.
+	 * @return Response OK 200.
+	 * @return EntityNotFoundException if entity doesn't exist 404.
+	 * @return PersistenceException if updating went wrong 500.
+	 * @return Other exception 500.
 	 */
 	@PUT
 	@Path("/{id}")
@@ -309,9 +329,9 @@ public class YdelseResource {
 	 * 
 	 * @param id
 	 *            Delete resource from id
-	 * @return Response OK
-	 * @return Response EntityNotFoundException
-	 * @return Response PersistenceException
+	 * @return Response OK 200
+	 * @return Response EntityNotFoundException 404
+	 * @return Response PersistenceException 500
 	 * @return Response Internal error 500
 	 * 
 	 */

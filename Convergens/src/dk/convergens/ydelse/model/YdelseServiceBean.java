@@ -22,12 +22,12 @@ import org.jboss.resteasy.spi.NotImplementedYetException;
  */
 
 @Stateless
-public class YdelseServiceMySQLBean implements YdelseService {
+public class YdelseServiceBean implements YdelseService {
 
 	/**
 	 * Logger
 	 */
-	private static Logger logger = Logger.getLogger(YdelseServiceMySQLBean.class.getName());
+	private static Logger logger = Logger.getLogger(YdelseServiceBean.class.getName());
 
 	/**
 	 * Persistence unit.
@@ -38,7 +38,15 @@ public class YdelseServiceMySQLBean implements YdelseService {
 	@PostConstruct
 	public void init() {
 	}
-
+	
+	public EntityManager getEntityManager() {
+		return em;
+	}
+	
+	public void setEntityManager(EntityManager entityManager) {
+		this.em = entityManager;
+	}
+	
 	/**
 	 * Return persisted entity. Makes sure that entity is in Entity Manager and
 	 * in Database.
@@ -54,11 +62,13 @@ public class YdelseServiceMySQLBean implements YdelseService {
 		logger.fine("Creating ydelse: " + t);
 
 		try {
-
+			
 			// Put entity in manager
 			em.persist(t);
+			
 			// Persist entity manger
 			em.flush();
+			
 			// Make entity manager and database consistent.
 			em.refresh(t);
 
@@ -101,7 +111,7 @@ public class YdelseServiceMySQLBean implements YdelseService {
 	@Override
 	public <T> T update(T t) {
 		logger.fine("Updating " + t);
-
+		
 		try {
 			
 			// Check if entity not exist.
@@ -114,6 +124,7 @@ public class YdelseServiceMySQLBean implements YdelseService {
 		} catch (EJBException ejbe) {
 			throw (EJBException) new EJBException().initCause(ejbe);
 		}
+		
 	}
 
 	/**
@@ -146,14 +157,14 @@ public class YdelseServiceMySQLBean implements YdelseService {
 
 	/**
 	 * Return List<T> if list is not empty. If List<T> is empty throw
-	 * NotFoundException.
+	 * NullPointerException.
 	 * 
 	 * @param namedQueryName
 	 *            Name of the query created. (@NamedQuery).
 	 * 
 	 * @return Return the results generated from the query.
 	 * 
-	 * @throw NotFoundException
+	 * @throw NullPointerException
 	 * @throw EJBException
 	 * 
 	 */
@@ -168,19 +179,19 @@ public class YdelseServiceMySQLBean implements YdelseService {
 			results = em.createNamedQuery(namedQueryName).getResultList();
 
 			if (results.isEmpty()) {
-				throw new NotFoundException();
+				throw new NullPointerException();
 			}
 
 		} catch (EJBException ejbe) {
 			throw (EJBException) new EJBException().initCause(ejbe);
 		}
-
+		
 		return results;
 	}
 
 	/**
 	 * Returns List<T> if list is not empty. If list is empty throw
-	 * NotFoundException.
+	 * NullPointerException.
 	 * 
 	 * @param namedQueryName
 	 *            Name of the query created. (@NamedQuery).
@@ -189,7 +200,7 @@ public class YdelseServiceMySQLBean implements YdelseService {
 	 * 
 	 * @return Return result list
 	 * 
-	 * @throw NotFoundException
+	 * @throw NullPointerException
 	 * @throw EJBException
 	 * 
 	 */
@@ -203,7 +214,7 @@ public class YdelseServiceMySQLBean implements YdelseService {
 			List<T> results = findWithNamedQuery(namedQueryName, parameters, 0);
 
 			if (results.isEmpty()) {
-				throw new NotFoundException();
+				throw new NullPointerException();
 			}
 
 			return results;
@@ -238,6 +249,5 @@ public class YdelseServiceMySQLBean implements YdelseService {
 			query.setParameter(entry.getKey(), entry.getValue());
 		}
 		return query.getResultList();
-	}
-
+	}		
 }

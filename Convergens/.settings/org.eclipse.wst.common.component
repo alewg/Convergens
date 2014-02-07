@@ -2,6 +2,7 @@
     <wb-module deploy-name="dk.convergens.ydelse">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
         <property name="java-output-path" value="/dk.convergens.ydelse/build/classes"/>
         <property name="context-root" value="dk.convergens.ydelse"/>
     </wb-module>
