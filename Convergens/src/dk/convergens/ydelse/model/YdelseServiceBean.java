@@ -21,6 +21,8 @@ import org.jboss.resteasy.spi.NotImplementedYetException;
  * Implementing YdelseService with an EntityManager for CRUD-services.
  */
 
+//FIXME could make it abstract, as it's 100% generic.
+
 @Stateless
 public class YdelseServiceBean implements YdelseService {
 
@@ -35,12 +37,8 @@ public class YdelseServiceBean implements YdelseService {
 	@PersistenceContext
 	EntityManager em;
 
-	@PostConstruct
-	public void init() {
-	}
-	
 	/**
-	 * Used for testing.
+	 * Used for testing for mocking. Setting a new EntityManager.
 	 * 
 	 * @param EntityManager
 	 */
@@ -108,21 +106,16 @@ public class YdelseServiceBean implements YdelseService {
 	 * 
 	 * @return Returns the updated entity.
 	 * 
-	 * @throws EnityNotFoundException
+	 * @throws EJBException
 	 */
 	@Override
 	public <T> T update(T t) {
+		//FIXME could implement with an ID, so only updating is accepted.
+		
 		logger.fine("Updating " + t);
 		
 		try {
-			
-			// Check if entity not exist.
-			if (em.getReference(t.getClass(), ((Ydelse) t).getId()) == null) {
-				throw new EntityNotFoundException();
-			}
-			
 			return em.merge(t);
-			
 		} catch (EJBException ejbe) {
 			throw (EJBException) new EJBException().initCause(ejbe);
 		}
@@ -166,7 +159,7 @@ public class YdelseServiceBean implements YdelseService {
 	 * 
 	 * @return Return the results generated from the query.
 	 * 
-	 * @throws NullPointerException
+	 * @throws IllegalStateException
 	 * @throws EJBException
 	 * 
 	 */
@@ -181,7 +174,8 @@ public class YdelseServiceBean implements YdelseService {
 			results = em.createNamedQuery(namedQueryName).getResultList();
 
 			if (results.isEmpty()) {
-				throw new NullPointerException();
+				logger.warning("Resultlist is empty");
+				throw new IllegalStateException();
 			}
 
 		} catch (EJBException ejbe) {
@@ -202,7 +196,7 @@ public class YdelseServiceBean implements YdelseService {
 	 * 
 	 * @return Return result list
 	 * 
-	 * @throws NullPointerException
+	 * @throws IllegalStateException
 	 * @throws EJBException
 	 * 
 	 */
@@ -216,7 +210,8 @@ public class YdelseServiceBean implements YdelseService {
 			List<T> results = findWithNamedQuery(namedQueryName, parameters, 0);
 
 			if (results.isEmpty()) {
-				throw new NullPointerException();
+				logger.warning("Resultlist is empty.");
+				throw new IllegalStateException();
 			}
 
 			return results;

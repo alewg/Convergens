@@ -94,6 +94,9 @@ public class YdelseResource extends Application {
 		try {
 			ydelser = ydelseService.findWithNamedQuery("Ydelse.findAll");
 			return Response.ok(ydelser).build();
+		} catch (IllegalStateException ise) {
+			System.out.println("-------- illegal state exception ---------");
+			return Response.status(Status.NOT_FOUND).build();
 		} catch (EJBException ejbe) {
 			
 			// Check EJBException to be NotFoundException
